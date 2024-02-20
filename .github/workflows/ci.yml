@@ -52,3 +52,17 @@ jobs:
         with:
           start: npm run start:frontend
           command: npm run test:frontend
+  slack-report:
+    name: Post report slack
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    needs:
+      frontend-tests
+    steps:
+      name: Send slack message
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        channel-id: 'qa_team'
+        slack-message: 'Results of tests in sandbox:dancy_cucumber:'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.TEST_TOKEN }}
